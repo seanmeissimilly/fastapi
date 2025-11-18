@@ -1,7 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from sqlmodel import SQLModel
 
-from .routers.auth_routes import app as auth_routes
+from app.db.session import engine
+from app.routers import users, auth
 
 app = FastAPI()
 
@@ -13,7 +15,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(auth_routes, prefix='/auth', tags=['auth'])
+SQLModel.metadata.create_all(engine)
+
+app.include_router(auth.router, prefix='/auth', tags=['auth'])
+app.include_router(users.router, prefix="/users", tags=["users"])
 
 
 @app.get("/")

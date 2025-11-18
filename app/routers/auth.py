@@ -1,8 +1,8 @@
 from fastapi import APIRouter
 
-app = APIRouter()
+router = APIRouter()
 
 
-@app.post('/login')
+@router.post('/login')
 async def login():
     return {'message': 'Login router'}
