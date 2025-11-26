@@ -1,11 +1,12 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from sqlmodel import SQLModel
 
-from app.db.session import engine
 from app.routers import users, auth
 
 app = FastAPI()
+
+app.title='First API with FastApi'
+app.version='1.0.1'
 
 app.add_middleware(
     CORSMiddleware,
@@ -15,12 +16,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# SQLModel.metadata.create_all(engine)
-
 app.include_router(auth.router, prefix='/auth', tags=['auth'])
 app.include_router(users.router, prefix="/users", tags=["users"])
 
 
-@app.get("/")
+@app.get("/", tags=['home'])
 async def read_root():
     return {"mensaje": "Hola Mundo"}
